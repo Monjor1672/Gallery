@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Code Gallery | Manjur Alam</title>
+    <style>
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #a7a7a7;
+            --background-color: #0a0a0a;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'SF Mono', 'Consolas', 'Menlo', monospace;
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            overflow-x: hidden;
+        }
+        #background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 4rem;
+        }
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        nav ul {
+            list-style: none;
+        }
+        nav a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: var(--primary-color);
+        }
+        h1 {
+            font-size: 3rem;
+            margin-top: 4rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        .project {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ffae42;
+        }
+        h4 {
+            font-size: 1rem;
+            font-weight: normal;
+            color: var(--secondary-color);
+        }
+        .next-button-container {
+            text-align: center;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .next-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            color: var(--primary-color);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
+        }
+        .next-button:hover {
+            background: linear-gradient(45deg, #00c6ff, #007bff);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 198, 255, 0.6);
+        }
+        
+        
+   
+
+.tool-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px;
+}
+
+.tool-item {
+    background-color: rgba(255, 255, 255, 0.9); 
+    color: #333;
+    padding: 10px 18px;
+    border-radius: 20px; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.tool-item:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+        
+    </style>
+</head>
+<body>
+
+    <canvas id="background-animation"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="brand-logo">Manjur Alam</div>
+            <nav>
+                <ul>
+                    <li><a href="Futuristic.html">Gallery</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Code Meets Art: The Digital Canvas</h1>
+            
+            <section>
+                <h2>Featured Experiments</h2>
+                <div class="project">
+                    <h3>Kinetic Typography Test</h3>
+     <div class="tool-container">
+    <div class="tool-item">p5.js</div>
+    <div class="tool-item">WebGL</div>
+    <div class="tool-item">JavaScript (JS)</div>
+    <div class="tool-item">Three.js</div>
+    <div class="tool-item">CSS3</div>
+    <div class="tool-item">Web Audio API</div>
+    <div class="tool-item">GLSL (Shader Language)</div>
+                </div>
+            </section>
+        </main>
+
+        <div class="next-button-container">
+            <a href="futuristic.html" class="next-button">Next</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('background-animation');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * .4) - .2;
+                let directionY = (Math.random() * .4) - .2;
+                particlesArray.push(new Particle(x, y, directionX, directionY, size));
+            }
+        }
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = 'rgba(150, 150, 150, 0.5)';
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                        ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(140, 140, 140,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        window.addEventListener('resize', function() {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+
+        init();
+        animate();
+    </script>
+
+</body>
+</html>
