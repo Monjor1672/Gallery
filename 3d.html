@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic UI with Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ffff;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-item {
+            padding: 8px 15px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            background: rgba(0, 255, 255, 0.05);
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-item:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        .instructions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 300px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .instructions h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .instructions p {
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            color: rgba(0, 255, 255, 0.8);
+        }
+        .instructions .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .instructions .close-btn:hover {
+            color: #f00;
+        }
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 1s ease;
+        }
+        .loading-text {
+            color: #00ffff;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(-100px) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(var(--x-offset));
+                opacity: 0;
+            }
+        }
+        .notification-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            filter: blur(10px);
+            z-index: 1002;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 25px 40px;
+            text-align: center;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+        .notification-panel.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            filter: blur(0);
+            pointer-events: auto;
+        }
+        .notification-panel p {
+            font-size: 16px;
+            color: #00ffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .notification-panel .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .notification-panel .close-btn:hover {
+            color: #f00;
+        }
+        .notification-panel .close-btn.hide-close-btn {
+            display: none;
+        }
+        .profile-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .profile-container:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+        }
+        .profile-container img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        /* Console Section Styles */
+        .console-container {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            max-height: 250px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+        .console-container h3 {
+            color: #00ffff;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .console-output {
+            background: #1a1a1a;
+            color: #00ff00; /* Green text for console */
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .console-output span.cursor {
+            display: inline-block;
+            background-color: #00ff00;
+            width: 8px;
+            height: 15px;
+            margin-left: 2px;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+        @keyframes blink-caret {
+            from, to { background-color: transparent }
+            50% { background-color: #00ff00; }
+        }
+        .console-buttons {
+            margin-top: 15px;
+            text-align: right;
+        }
+        .console-buttons button {
+            background: #00ffff;
+            color: #0a0a0a;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .console-buttons button:hover {
+            background: #00e6e6;
+            transform: translateY(-1px);
+        }
+
+        /* Quote Generator Styles */
+        .quote-generator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 350px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .quote-generator h3 {
+            color: #00ffff;
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .quote-display {
+            background: #1a1a1a;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 14px;
+            color: rgba(0, 255, 255, 0.9);
+            text-align: center;
+        }
+        .generate-quote-btn {
+            background: #00ffff;
+            color: #0a0a0a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .generate-quote-btn:hover {
+            background: #00e6e6;
+            transform: translateY(-1px);
+        }
+        /* New Border Glow Animation */
+        @keyframes border-glow {
+            0% { box-shadow: 0 0 5px #00ffff; }
+            50% { box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+            100% { box-shadow: 0 0 5px #00ffff; }
+        }
+        .glow {
+            animation: border-glow 0.8s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                top: 10px;
+                left: 10px;
+                padding: 10px 15px;
+            }
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            .instructions {
+                bottom: 10px;
+                right: 10px;
+                max-width: 250px;
+                padding: 15px;
+            }
+            .instructions h3 {
+                font-size: 16px;
+            }
+            .instructions p {
+                font-size: 12px;
+            }
+            .notification-panel {
+                padding: 20px 30px;
+            }
+            .notification-panel p {
+                font-size: 14px;
+            }
+            .profile-container {
+                bottom: 10px;
+                right: 10px;
+                width: 50px;
+                height: 50px;
+            }
+            .profile-container img {
+                width: 30px;
+                height: 30px;
+            }
+            .console-container {
+                width: 90%;
+                top: 100px;
+                padding: 10px;
+            }
+            .console-output {
+                font-size: 11px;
+            }
+            .console-buttons button {
+                padding: 6px 10px;
+                font-size: 10px;
+            }
+            .quote-generator {
+                max-width: 90%;
+                left: 10px;
+                bottom: 10px;
+                padding: 15px;
+            }
+            .quote-display {
+                font-size: 12px;
+                min-height: 60px;
+            }
+            .generate-quote-btn {
+                padding: 8px 15px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">INITIALIZING UI...</div>
+    </div>
+    <div class="background-animation" id="backgroundAnimation"></div>
+    <nav class="nav-container">
+        <ul class="nav-menu">
+            <li><a href="#" class="nav-item" data-message="This is the home page of our futuristic UI.">Home</a></li>
+            <li><a href="#" class="nav-item" data-message="Welcome to our gallery, where you can see amazing visuals.">Gallery</a></li>
+            <li><a href="#" class="nav-item" data-message="Find out more about our team and our mission on this page.">About</a></li>
+            <li><a href="#" class="nav-item" data-message="Get in touch with us through our contact information.">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="instructions" id="instructionsPanel">
+        <span class="close-btn" id="closeInstructions">&times;</span>
+        <h3>ওয়েবসাইটের বিস্তারিত</h3>
+        <p>এই ওয়েবসাইটটি একটি অত্যাধুনিক এবং ইন্টারেক্টিভ ডিজিটাল স্পেস, যা আপনাকে গতানুগতিক ওয়েব ডিজাইনের বাইরে একটি নতুন অভিজ্ঞতা দেবে। এখানে প্রতিটি উপাদান আপনার নিয়ন্ত্রণের জন্য তৈরি করা হয়েছে।</p>
+        <p>এই ওয়েবসাইটটি ডিজাইন এবং প্রযুক্তির এক দারুণ সমন্বয়, যা আপনাকে একটি গভীর ও আকর্ষক অনলাইন অভিজ্ঞতা দেবে।</p>
+    </div>
+    <div class="profile-container" id="profilePanel" data-message="I am a skilled web developer with a great proficiency in HTML, CSS, and JavaScript. I enjoy creating beautiful and interactive websites.">
+        <img src="Support.png" alt="Support Icon">
+    </div>
+
+    <div class="console-container" id="consoleContainer">
+        <h3>System Console</h3>
+        <div class="console-output" id="consoleOutput"></div>
+        <div class="console-buttons">
+            <button id="runConsoleBtn">Run Command</button>
+            <button id="clearConsoleBtn">Clear</button>
+        </div>
+    </div>
+
+    <div class="quote-generator" id="quoteGenerator">
+        <h3>Inspirational Tech Quote</h3>
+        <div class="quote-display" id="quoteDisplay">Click "Generate Quote" to see an inspiring quote!</div>
+        <button class="generate-quote-btn" id="generateQuoteBtn">Generate Quote</button>
+    </div>
+
+    <div class="notification-panel" id="notificationPanel">
+        <p id="notificationText"></p>
+        <span class="close-btn" id="closeNotification">&times;</span>
+    </div>
+
+    <script>
+        class BackgroundAnimation {
+            constructor() {
+                this.container = document.getElementById('backgroundAnimation');
+                this.init();
+            }
+            init() {
+                this.createParticles();
+            }
+            createParticles() {
+                setInterval(() => {
+                    this.createParticle();
+                }, 200);
+            }
+            createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 3 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                const startX = Math.random() * window.innerWidth;
+                particle.style.left = `${startX}px`;
+                particle.style.top = `-10px`;
+                const duration = Math.random() * 5 + 3;
+                particle.style.animationDuration = `${duration}s`;
+                const xOffset = (Math.random() - 0.5) * 300;
+                particle.style.setProperty('--x-offset', `${xOffset}px`);
+                const hue = 180 + (Math.random() * 30 - 15);
+                const saturation = 100;
+                const lightness = 50 + Math.random() * 40;
+                particle.style.background = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.5 + Math.random() * 0.4})`;
+                particle.style.boxShadow = `0 0 ${size * 2}px rgba(0, 255, 255, 0.7)`;
+                this.container.appendChild(particle);
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, duration * 1000);
+            }
+        }
+        function hideLoadingScreen() {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }, 2000);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const backgroundAnimation = new BackgroundAnimation();
+            hideLoadingScreen();
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            const profilePanel = document.getElementById('profilePanel');
+            const notificationPanel = document.getElementById('notificationPanel');
+            const notificationText = document.getElementById('notificationText');
+            const closeNotificationBtn = document.getElementById('closeNotification');
+            const instructionsPanel = document.getElementById('instructionsPanel');
+            const closeInstructionsBtn = document.getElementById('closeInstructions');
+            
+            // Function to generate sound using Web Audio API
+            function playSound(type) {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                switch (type) {
+                    case 'click':
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                        gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                        break;
+                    case 'notification':
+                        oscillator.type = 'square';
+                        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+                        gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                        break;
+                }
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.5);
+            }
+
+            function addGlowEffect(element) {
+                element.classList.add('glow');
+                setTimeout(() => {
+                    element.classList.remove('glow');
+                }, 800);
+            }
+
+            function showNotification(message, isDismissible) {
+                notificationText.textContent = message;
+                notificationPanel.classList.add('show');
+                addGlowEffect(notificationPanel);
+                playSound('notification');
+                if (isDismissible) {
+                    closeNotificationBtn.style.display = 'block';
+                } else {
+                    closeNotificationBtn.style.display = 'none';
+                    setTimeout(() => {
+                        notificationPanel.classList.remove('show');
+                    }, 5000);
+                }
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    addGlowEffect(item);
+                    playSound('click');
+                    const message = item.getAttribute('data-message');
+                    showNotification(message, false);
+                });
+            });
+
+            profilePanel.addEventListener('click', () => {
+                addGlowEffect(profilePanel);
+                playSound('click');
+                const message = profilePanel.getAttribute('data-message');
+                showNotification(message, true);
+            });
+
+            closeInstructionsBtn.addEventListener('click', () => {
+                instructionsPanel.style.display = 'none';
+            });
+
+            closeNotificationBtn.addEventListener('click', () => {
+                notificationPanel.classList.remove('show');
+            });
+
+            // Console Script
+            const consoleContainer = document.getElementById('consoleContainer');
+            const consoleOutput = document.getElementById('consoleOutput');
+            const runConsoleBtn = document.getElementById('runConsoleBtn');
+            const clearConsoleBtn = document.getElementById('clearConsoleBtn');
+            const commands = [
+                "Initializing main system...",
+                "Loading UI components...",
+                "Establishing secure connection...",
+                "Running diagnostics...",
+                "System online. Welcome, user.",
+                "C:\\Users\\Developer> _"
+            ];
+            let commandIndex = 0;
+            let charIndex = 0;
+            let typingTimeout;
+
+            function typeWriter() {
+                if (commandIndex < commands.length) {
+                    if (charIndex < commands[commandIndex].length) {
+                        consoleOutput.innerHTML += commands[commandIndex].charAt(charIndex);
+                        charIndex++;
+                        typingTimeout = setTimeout(typeWriter, 50); // Typing speed
+                    } else {
+                        consoleOutput.innerHTML += '<br>'; // New line after each command
+                        commandIndex++;
+                        charIndex = 0;
+                        if (commandIndex < commands.length) {
+                            typingTimeout = setTimeout(typeWriter, 1000); // Pause before next command
+                        }
+                    }
+                }
+            }
+
+            runConsoleBtn.addEventListener('click', () => {
+                addGlowEffect(runConsoleBtn);
+                playSound('click');
+                clearTimeout(typingTimeout);
+                consoleOutput.innerHTML = '';
+                commandIndex = 0;
+                charIndex = 0;
+                typeWriter();
+            });
+
+            clearConsoleBtn.addEventListener('click', () => {
+                addGlowEffect(clearConsoleBtn);
+                playSound('click');
+                clearTimeout(typingTimeout);
+                consoleOutput.innerHTML = '';
+                commandIndex = 0;
+                charIndex = 0;
+            });
+
+            // Quote Generator Script
+            const quoteGenerator = document.getElementById('quoteGenerator');
+            const quoteDisplay = document.getElementById('quoteDisplay');
+            const generateQuoteBtn = document.getElementById('generateQuoteBtn');
+            const quotes = [
+                "The only way to do great work is to love what you do. - Steve Jobs",
+                "Code is like humor. When you have to explain it, it's bad. - Cory House",
+                "First, solve the problem. Then, write the code. - John Johnson",
+                "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. - Martin Fowler",
+                "The best error message is the one that never shows up. - Thomas Fuchs",
+                "Programming isn't about what you know; it's about what you can figure out. - Chris Pine",
+                "Optimism is an occupational hazard of programming: feedback is the treatment. - Kent Beck",
+                "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live. - John Woods"
+            ];
+
+            generateQuoteBtn.addEventListener('click', () => {
+                addGlowEffect(generateQuoteBtn);
+                playSound('click');
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                quoteDisplay.textContent = quotes[randomIndex];
+            });
+        });
+    </script>
+</body>
+</html>
